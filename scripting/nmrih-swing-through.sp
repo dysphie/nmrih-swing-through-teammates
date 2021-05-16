@@ -9,7 +9,7 @@ public Plugin myinfo = {
 	name        = "[NMRiH] Swing Through Teammates",
 	author      = "Dysphie",
 	description = "Allows melee traces to pass through teammates",
-	version     = "0.1.0",
+	version     = "0.1.1",
 	url         = ""
 };
 
@@ -21,7 +21,7 @@ enum
 }
 
 int offs_RefEHandle;
-bool checkingHit;
+int activeMelee = -1;
 ConVar cvIgnoreType;
 int ignoreType;
 
@@ -72,29 +72,38 @@ void ParseGamedata()
 	delete gd;
 }
 
-public MRESReturn OnCheckMeleeHit(DHookReturn hReturn)
+public MRESReturn OnCheckMeleeHit(int melee, DHookReturn hReturn)
 {
-	checkingHit = true;
+	activeMelee = melee;
 	return MRES_Ignored;
 }
 
-public MRESReturn OnCheckMeleeHitPost(DHookReturn hReturn)
-{
-	checkingHit = false;
+public MRESReturn OnCheckMeleeHitPost(int melee, DHookReturn hReturn)
+{	
+	activeMelee = -1;
 	return MRES_Ignored;
 }
 
 public MRESReturn OnMeleeShouldHitEntity(DHookReturn hReturn, DHookParam hParams)
 {
-	if (checkingHit && ignoreType != Ignore_None)
+	if (ignoreType == Ignore_None || activeMelee == -1)
 	{
-		int entity = hParams.GetObjectVar(1, offs_RefEHandle, ObjectValueType_Ehandle); 
-		if (0 < entity <= MaxClients)
-		{
-			hReturn.Value = IsPlayerInfected(entity) && ignoreType != Ignore_Infected;
-			return MRES_Supercede;
-		}
+		PrintToServer("Ignoring trace: Foreign function");
+		return MRES_Ignored;
 	}
+
+	int entity = hParams.GetObjectVar(1, offs_RefEHandle, ObjectValueType_Ehandle); 
+	if (entity == activeMelee || entity == GetEntPropEnt(activeMelee, Prop_Send, "m_hOwner"))
+	{
+		hReturn.Value = false;
+		return MRES_Supercede;
+	}
+	if (0 < entity <= MaxClients)
+	{
+		hReturn.Value = IsPlayerInfected(entity) && ignoreType != Ignore_Infected;
+		return MRES_Supercede;
+	}
+	
 	return MRES_Ignored;
 }
 
