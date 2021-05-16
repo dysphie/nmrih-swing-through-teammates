@@ -87,10 +87,7 @@ public MRESReturn OnCheckMeleeHitPost(int melee, DHookReturn hReturn)
 public MRESReturn OnMeleeShouldHitEntity(DHookReturn hReturn, DHookParam hParams)
 {
 	if (ignoreType == Ignore_None || activeMelee == -1)
-	{
-		PrintToServer("Ignoring trace: Foreign function");
 		return MRES_Ignored;
-	}
 
 	int entity = hParams.GetObjectVar(1, offs_RefEHandle, ObjectValueType_Ehandle); 
 	if (entity == activeMelee || entity == GetEntPropEnt(activeMelee, Prop_Send, "m_hOwner"))
