@@ -1,0 +1,73 @@
+"Games"
+{
+	"nmrih"
+	{
+		"Offsets"
+		{
+			"CBaseEntity::m_RefEHandle"
+			{
+				"library"	"server"
+				"windows"	"800"
+				"linux"		"820"
+			}
+		}
+
+		"Signatures"
+		{
+			"CTraceFilterSkipTwoEntities::ShouldHitEntity"
+			{
+				"library"	"server"
+				"windows"	"\x55\x8B\xEC\x56\x8B\xF1\xFF\x76\x10"
+				"linux"		"@_ZN27CTraceFilterSkipTwoEntities15ShouldHitEntityEP13IHandleEntityi"
+			}
+
+			"CNMRiH_MeleeBase::CheckMeleeHit"
+			{
+				"library"	"server"
+				"windows"	"\x53\x8B\xDC\x83\xEC\x08\x83\xE4\xF0\x83\xC4\x04\x55\x8B\x6B\x04\x89\x6C\x24\x04\x8B\xEC\x81\xEC\xB8\x01\x00\x00\x56\x57\x8B\xF1"
+				"linux"		"@_ZN16CNMRiH_MeleeBase13CheckMeleeHitER6VectorS1_"
+			}
+		}
+
+		"Functions"
+		{
+			"CTraceFilterSkipTwoEntities::ShouldHitEntity"
+			{
+				"signature"  "CTraceFilterSkipTwoEntities::ShouldHitEntity"
+				"callconv"  "thiscall"
+				"return"  "bool"
+				"this"  "ignore"
+				"arguments"
+				{
+					"pHandleEntity"
+					{
+						"type"  "objectptr"
+					}
+					"contentsMask"
+					{
+						"type"    "int"
+					}
+				}
+			}
+
+			"CNMRiH_MeleeBase::CheckMeleeHit"
+			{
+				"signature"  "CNMRiH_MeleeBase::CheckMeleeHit"
+				"callconv"  "thiscall"
+				"return"  "void"
+				"this"  "ignore"
+				"arguments"
+				{
+					"start"
+					{
+						"type"  "vectorptr"
+					}
+					"end"
+					{
+						"type"    "vectorptr"
+					}
+				}
+			}
+		}
+	}
+}
