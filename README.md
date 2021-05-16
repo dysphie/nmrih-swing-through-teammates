@@ -5,7 +5,7 @@ Allows melee traces to pass through teammates, avoiding situations where you try
 
 ### Requirements
 
-[DHooks2 with Dynamic Detours](https://github.com/peace-maker/DHooks2/releases) (detours16 or higher)
+- [DHooks2 with Dynamic Detours](https://github.com/peace-maker/DHooks2/releases) (detours16 or higher)
 
 ### ConVars
 - `sm_melee_swing_through_players` (Default: `1`)
