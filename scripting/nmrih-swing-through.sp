@@ -36,6 +36,8 @@ public void OnPluginStart()
 	);
 
 	cvIgnoreType.AddChangeHook(OnIgnoreTypeChanged);
+
+	AutoExecConfig();
 }
 
 public void OnConfigsExecuted()
