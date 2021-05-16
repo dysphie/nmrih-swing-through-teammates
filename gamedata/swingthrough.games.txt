@@ -55,7 +55,7 @@
 				"signature"  "CNMRiH_MeleeBase::CheckMeleeHit"
 				"callconv"  "thiscall"
 				"return"  "void"
-				"this"  "ignore"
+				"this"  "entity"
 				"arguments"
 				{
 					"start"
