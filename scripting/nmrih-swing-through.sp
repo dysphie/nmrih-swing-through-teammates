@@ -10,7 +10,7 @@ public Plugin myinfo =
 	name        = "[NMRiH] Swing Through Teammates",
 	author      = "Dysphie",
 	description = "Allows melee traces to pass through teammates",
-	version     = "0.1.1",
+	version     = "0.1.2",
 	url         = ""
 };
 
