@@ -5,7 +5,8 @@
 #pragma semicolon 1
 #pragma newdecls required
 
-public Plugin myinfo = {
+public Plugin myinfo = 
+{
 	name        = "[NMRiH] Swing Through Teammates",
 	author      = "Dysphie",
 	description = "Allows melee traces to pass through teammates",
@@ -22,8 +23,12 @@ enum
 
 int offs_RefEHandle;
 int activeMelee = -1;
+
 ConVar cvIgnoreType;
 int ignoreType;
+
+ConVar cvFF;
+bool ff;
 
 public void OnPluginStart()
 {
@@ -34,8 +39,10 @@ public void OnPluginStart()
 		"1 = Pass through healthy teammates, " ...
 		"2 = Pass through healthy and infected teammates. "
 	);
-
 	cvIgnoreType.AddChangeHook(OnIgnoreTypeChanged);
+
+	cvFF = FindConVar("mp_friendlyfire");
+	cvIgnoreType.AddChangeHook(OnFFChanged);
 
 	AutoExecConfig();
 }
@@ -43,11 +50,17 @@ public void OnPluginStart()
 public void OnConfigsExecuted()
 {
 	ignoreType = cvIgnoreType.IntValue;
+	ff = cvFF.BoolValue;
 }
 
 public void OnIgnoreTypeChanged(ConVar convar, const char[] oldValue, const char[] newValue)
 {
 	ignoreType = convar.IntValue;
+}
+
+public void OnFFChanged(ConVar convar, const char[] oldValue, const char[] newValue)
+{
+	ff = convar.BoolValue;
 }
 
 void ParseGamedata()
@@ -58,12 +71,14 @@ void ParseGamedata()
 	if (!shouldHitEnt)
 		SetFailState("Failed to detour CTraceFilterSkipTwoEntities::ShouldHitEntity");
 	shouldHitEnt.Enable(Hook_Pre, OnMeleeShouldHitEntity);
+	delete shouldHitEnt;
 
 	DynamicDetour checkMeleeHit = DynamicDetour.FromConf(gd, "CNMRiH_MeleeBase::CheckMeleeHit");
 	if (!checkMeleeHit)
 		SetFailState("Failed to detour CNMRiH_MeleeBase::CheckMeleeHit");
 	checkMeleeHit.Enable(Hook_Pre, OnCheckMeleeHit);
 	checkMeleeHit.Enable(Hook_Post, OnCheckMeleeHitPost);
+	delete checkMeleeHit;
 
 	offs_RefEHandle = gd.GetOffset("CBaseEntity::m_RefEHandle");
 	if (offs_RefEHandle == -1)
@@ -86,7 +101,7 @@ public MRESReturn OnCheckMeleeHitPost(int melee, DHookReturn hReturn)
 
 public MRESReturn OnMeleeShouldHitEntity(DHookReturn hReturn, DHookParam hParams)
 {
-	if (ignoreType == Ignore_None || activeMelee == -1)
+	if (ff || ignoreType == Ignore_None || activeMelee == -1)
 		return MRES_Ignored;
 
 	int entity = hParams.GetObjectVar(1, offs_RefEHandle, ObjectValueType_Ehandle); 
