@@ -1,3 +1,5 @@
+> :warning: This fix is no longer needed as of NMRiH 1.11.5
+> 
 # [NMRiH] Swing Through Teammates
 Allows melee traces to pass through teammates, avoiding situations where you try to hit a zombie but another player gets in the way and absorbs the damage.
 [See video](https://www.youtube.com/watch?v=xZCSx2RwSd4).
